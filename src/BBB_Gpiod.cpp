@@ -28,7 +28,11 @@
 #include <cstring>
 #include "BBB_Gpiod.h"
 
-// Constructor initialize paths, and vectors
+/* This Constructor initializes the "gpio_lines_t linesArray" with the line number, line name, and chipname similar
+ * to that was discovered using the command line "gpioinfo". Other info for the array items come from actual use.
+ * A unique "consumer" string is required for device resource conflicts which are handled by the kernel.
+ *
+*/
 Gpiod::Gpiod(void)
 {
 	GpiodClass::lines = linesArray;
@@ -38,6 +42,8 @@ Gpiod::Gpiod(void)
 int Gpiod::gpioConstructor(void)
 {
 	int ret;
+    srand(time(0)); // Seed the random number generator
+    unsigned randNum = rand(); // Create a unique consumer
 	unsigned lineNum;
 	char chipPath[] = "/dev/gpiochipxx";
 	char lineName[] = "PX_NN";
@@ -59,7 +65,7 @@ int Gpiod::gpioConstructor(void)
 		numLines = i;
 		linesArray[i].chipPath = chipPath;
 		linesArray[i].lineNum = lineNum;
-		linesArray[i].consumer = "ken";
+		linesArray[i].consumer = to_string(randNum);
 	}
 	return false;
 }

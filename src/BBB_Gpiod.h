@@ -29,14 +29,24 @@
 #define BBB_GPIOD_H_
 
 #ifdef NATIVE
-	#include <gpiod.h>
+#include <gpiod.h>
 #else
 	#include "gpiod.h"
 #endif
 #include "gpiod_structs.h"
 #include "gpiod_class.h"
 
-// Default pins
+/* Default pins - The enumerated list of pins were discovered on this relase version "trixie" using the following tools:
+ * $ gpioinfo P8_10 P8_12 P8_14 P8_17 P8_18 P8_26 P9_12
+ * gpiochip0 12  "P8_12" input
+ * gpiochip0 28  "P9_12" input
+ * gpiochip0 29  "P8_26" input
+ * gpiochip1 1   "P8_18" input
+ * gpiochip1 4   "P8_10" input
+ * gpiochip3 26  "P8_14" input
+ * gpiochip3 27  "P8_17" input
+ * Other pins are availble and can be added to the enumerated list
+*/
 enum line_id_t_  { P8_10=0, P8_12, P8_14, P8_17, P8_18, P8_26, P9_12, GPIO_NUM_LINES };
 
 #define DUMMY_CHIP_STR "/dev/gpiochipxx"

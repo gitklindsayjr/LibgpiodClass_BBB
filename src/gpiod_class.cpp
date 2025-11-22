@@ -709,13 +709,13 @@ void GpiodClass::printErrors(unsigned errorNum, unsigned lineId)
 		fprintf(stderr, "ERROR: Direction not set to OUTPUT\n");
 		break;
 	case SET_VALUE_CREATE_REQUEST:
-		fprintf(stderr, "ERROR: Line requested: gpiod_line_request object not created\n");
+		fprintf(stderr, "ERROR: Line requested failed: %s, line #%d\n", strerror(errno), lineNum);
 		break;
 	case SET_ACTIVE_SETTINGS_FAILED:
 		fprintf(stderr, "ERROR: Set active settings failed. line #%d\n", lineNum);
 		break;
 	case SET_ACTIVE_REQUEST_FAILED:
-		fprintf(stderr, "ERROR: Set active line request failed, line #%d\n", lineNum);
+		fprintf(stderr, "ERROR: Set active line request failed: %s, line #%d\n", strerror(errno), lineNum);
 		break;
 	case SET_EDGE_DETECTION_SETTINGS_FAILED:
 		fprintf(stderr, "ERROR: Set edge detection settings failed, line #%d\n", lineNum);
@@ -740,7 +740,7 @@ void GpiodClass::printErrors(unsigned errorNum, unsigned lineId)
 		fprintf(stderr, "ERROR: Edge detection failed to create event buffer: %s, line #%d\n", strerror(errno), lineNum);
 		break;
 	case GET_EVENT_BUFFER_SIZE_FAILURE:;
-		fprintf(stderr, "ERROR: Get line event data buffer size failure, line #%d\n", lineNum);
+		fprintf(stderr, "ERROR: Get line event data buffer size failure: %s, line #%d\n", strerror(errno), lineNum);
 		break;
 	case GET_EDGE_DETECTION_REQUEST_FAILED:
 		fprintf(stderr, "ERROR: Edge event object not created\n");
@@ -766,7 +766,7 @@ int GpiodClass::commonSetup(unsigned lineId)
 	{   // Created via open
 		errorNum = SETUP_CHIP_NOT_OPENED;
 		printErrors(errorNum, lineId);
-		return -1;
+		return ERROR;
 	}
 	request = lines[lineId].request;
 	if(request)
@@ -779,16 +779,16 @@ int GpiodClass::commonSetup(unsigned lineId)
 	{
 		errorNum = SETUP_CREATE_LINE_CONFIG_FAILED;
 		printErrors(errorNum, lineId);
-		return -1;
+		return ERROR;
 	}
 	req_cfg = gpiod_request_config_new();
 	if(req_cfg == NULL)
 	{
 		errorNum = SETUP_FAILED_TO_CREATE_REQUEST;
 		printErrors(errorNum, lineId);
-		return -1;
+		return ERROR;
 	}
 	consumer = (char *)lines[lineId].consumer.c_str();
 	gpiod_request_config_set_consumer(req_cfg, consumer);
-	return 0;
+	return NO_ERROR;
 }
