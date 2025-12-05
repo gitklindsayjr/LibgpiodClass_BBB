@@ -30,7 +30,7 @@ BBB_Gpiod.cpp BBB_Gpiod.h gpiod_class.cpp gpiod_class.h gpiod_structs.h main.cpp
 
 Begin the build process:<br>
 $ mkdir build<br>
-$ cmake -DNATIVE ..<br>
+$ cmake -DNATIVE=1 ..<br>
 $ cmake --build . -- VERBOSE=1<br>
 
 Build process results:<br>
